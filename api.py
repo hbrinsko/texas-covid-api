@@ -2,6 +2,7 @@ import flask
 from flask import request, jsonify
 import csv
 import json
+from collections import OrderedDict
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -92,4 +93,4 @@ def timeline_county():
                     return jsonify(county)
     return 'County not valid'
 
-app.run()
+app.run(port=5000)
