@@ -17,13 +17,14 @@ Run app on http://127.0.0.1:5000/:
 ```bash
 python3 api.py
 ```
+
 ## Data Source
 **Texas Department of State Health Services** - https://www.dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyCaseCountData.xlsx - 
 * Updated Daily. This Excel files contains daily case counts by county, beginning March 4, 2020.
 * County-level case counts were not available on March 7, March 8, and March 14.
 * Population data is based on Texas population projections, 2020 (https://www.dshs.texas.gov/chs/popdat/st2020.shtm).
 
-### Endpoint Information
+## Endpoint Information
 
 __Query Parameters__
 
@@ -35,8 +36,6 @@ All endpoints have an optional parameter for county name. If no county is provid
 
 
 
-
-
 __Latest__
 
 ```http
@@ -45,7 +44,7 @@ GET /api/v1/latest
 
 Gets latest amount of total confirmed cases
 
-__Sample response__
+Sample Response:
 ```json
   {
     "cases": "10", 
@@ -60,7 +59,7 @@ GET /api/v1/cases
 ```
 Gets timeline of case count
 
-__Sample response__
+Sample Response:
 ```json
   {
     "cases": "4977", 
@@ -83,7 +82,7 @@ GET /api/v1/dailychange
 
 Gets a timeline of the newly confirmed cases for a given county
 
-__Sample response__
+Sample Response:
 ```json
   {
     "count": "4977", 
@@ -100,7 +99,6 @@ __Sample response__
     }
   }
 ```
-### Query Parameters
 
 
 
