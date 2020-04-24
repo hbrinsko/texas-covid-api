@@ -32,43 +32,39 @@ def build_case_count_timeline(headers, row):
 def home():
     return "<h1>Texas Department of State Health Services CoVid-19 Data</h1><p>API for tracking the Covid Outbreak in Texas</p>"
 
+@app.route('/api/v1/latest', methods=['GET'])
+def latest_county():
+    get_all = False
+    if 'county' in request.args:
+        name = request.args['county']
+        name = name.lower()
+    else:
+        get_all = True
 
-@app.route('/api/v1/latest/all', methods=['GET'])
-def latest_all():
     with open('counties.csv', 'r') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
         next(csv_reader)
         counties = []
         for row in csv_reader:
-            county = {
-                'name': row[0],
-                'population': row[1],
-                'count': row[-1]
-            }
-            counties.append(county)
-    return jsonify(counties)
-
-
-@app.route('/api/v1/latest', methods=['GET'])
-def latest_county():
-    if 'county' in request.args:
-        name = request.args['county']
-        name = name.lower()
-    else:
-        return "Error: No county provided. Please specify a county, ex: Travis."
-
-    with open('counties.csv', 'r') as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=',')
-        next(csv_reader)
-        for row in csv_reader:
-            if row[0].lower() == name:
+            if get_all:
                 county = {
-                    'name': row[0],
+                    'county': row[0],
                     'population': row[1],
-                    'count': row[-1]
+                    'cases': row[-1]
+                }
+                counties.append(county)
+                continue
+            elif row[0].lower() == name:
+                county = {
+                    'county': row[0],
+                    'population': row[1],
+                    'cases': row[-1]
                 }
                 return jsonify(county)
-    return 'County not valid'
+    if get_all:
+        return jsonify(counties)
+    else:
+        return 'Error: No county provided. Please specify a county, ex: Travis.'
 
 
 @app.route('/api/v1/cases/all', methods=['GET'])
@@ -79,9 +75,9 @@ def timelines_all():
         counties = []
         for row in csv_reader:
             county = {
-                'name': row[0],
+                'county': row[0],
                 'population': row[1],
-                'count': row[-1],
+                'cases': row[-1],
                 'timeline': build_case_count_timeline(headers, row)
             }
             counties.append(county)
@@ -90,56 +86,66 @@ def timelines_all():
 
 @app.route('/api/v1/cases', methods=['GET'])
 def timeline_county():
+    get_all = False
     if 'county' in request.args:
         name = request.args['county']
         name = name.lower()
     else:
-        return "Error: No county provided. Please specify a county, ex: Travis."
+        get_all = True
+        # return "Error: No county provided. Please specify a county, ex: Travis."
 
-    with open('counties.csv', 'r') as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=',')
-        headers = next(csv_reader)
-        for row in csv_reader:
-            if row[0].lower() == name:
-                county = {
-                    'name': row[0],
-                    'population': row[1],
-                    'count': row[-1],
-                    'timeline': build_case_count_timeline(headers, row)
-                }
-                return jsonify(county)
-    return 'County not valid'
-
-@app.route('/api/v1/dailychange/all', methods=['GET'])
-def daily_change_all():
     with open('counties.csv', 'r') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
         headers = next(csv_reader)
         counties = []
         for row in csv_reader:
-            county = {
-                'name': row[0],
-                'population': row[1],
-                'count': row[-1],
-                'timeline': build_daily_change_timeline(headers, row)
-            }
-            counties.append(county)
-    return jsonify(counties)
+            if get_all:
+                county = {
+                    'county': row[0],
+                    'population': row[1],
+                    'cases': row[-1],
+                    'timeline': build_case_count_timeline(headers, row)
+                }
+                counties.append(county)
+                continue
+            elif row[0].lower() == name:
+                county = {
+                    'county': row[0],
+                    'population': row[1],
+                    'cases': row[-1],
+                    'timeline': build_case_count_timeline(headers, row)
+                }
+                return jsonify(county)
+    if get_all:
+        return jsonify(counties)
+    else:
+        return 'Error: No county provided. Please specify a county, ex: Travis.'
 
 
 @app.route('/api/v1/dailychange', methods=['GET'])
 def daily_change_county():
+    get_all = False
     if 'county' in request.args:
         name = request.args['county']
         name = name.lower()
     else:
-        return "Error: No county provided. Please specify a county, ex: Travis."
+        get_all = True
 
     with open('counties.csv', 'r') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
         headers = next(csv_reader)
+        counties = []
         for row in csv_reader:
-            if row[0].lower() == name:
+            if get_all:
+                county = {
+                    'name': row[0],
+                    'population': row[1],
+                    'count': row[-1],
+                    'timeline': build_daily_change_timeline(headers, row)
+                }
+                counties.append(county)   
+                continue             
+            elif row[0].lower() == name:
                 county = {
                     'name': row[0],
                     'population': row[1],
@@ -147,7 +153,10 @@ def daily_change_county():
                     'timeline': build_daily_change_timeline(headers, row)
                 }
                 return jsonify(county)
-    return 'County not valid'
+    if get_all:
+        return jsonify(counties)
+    else:
+        return 'Error: No county provided. Please specify a county, ex: Travis.'
 
 
 app.run(port=5000)

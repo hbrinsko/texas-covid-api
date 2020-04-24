@@ -18,81 +18,79 @@ pip install -r requirements.txt
 * County-level case counts were not available on March 7, March 8, and March 14.
 * Population data is based on Texas population projections, 2020 (https://www.dshs.texas.gov/chs/popdat/st2020.shtm).
 
+## Endpoint Information
+
 ## Endpoints
-
-### Latest Endpoint
-
-Getting latest amount of total confirmed cases
 
 ```http
 GET /api/v1/latest
 ```
 
-__Query String Parameters__
-| __Query string parameter__ | __Description__                                                                  | __Type__ |
-| -------------------------- | -------------------------------------------------------------------------------- | -------- |
-| county                     | Name of county for pulling data. Ex: *Travis* | String   |
+Gets latest amount of total confirmed cases
 
 __Sample response__
 ```json
   {
-    "count": "10", 
-    "name": "Anderson", 
+    "cases": "10", 
+    "county": "Anderson", 
     "population": "62,245"
   }
 ```
 
-### Case Count Endpoint
-
-Getting timeline of case count
-
 ```http
 GET /api/v1/cases
 ```
-
-__Query String Parameters__
-| __Query string parameter__ | __Description__                                                                  | __Type__ |
-| -------------------------- | -------------------------------------------------------------------------------- | -------- |
-| county                     | Name of county for pulling data. Ex: *Travis* | String   |
+Gets timeline of case count
 
 __Sample response__
 ```json
   {
-    "count": "27", 
-    "name": "Angelina", 
-    "population": "94,245", 
+    "cases": "4977", 
+    "county": "Harris", 
+    "population": "4,885,616", 
     "timeline": {
-      "03-04-2020": 0, 
-      "03-05-2020": 0, 
-      "03-06-2020": 0, 
-      "03-09-2020": 0
+      "03-04-2020": "0", 
+      "03-05-2020": "0", 
+      "03-06-2020": "4", 
+      "03-09-2020": "5", 
+      "03-10-2020": "5"
       }
   }
 ```
-### Daily Change Endpoint
-
-Gets a timeline of the newly confirmed cases for a given county
 
 ```http
 GET /api/v1/dailychange
 ```
 
-__Query String Parameters__
-| __Query string parameter__ | __Description__                                                                  | __Type__ |
-| -------------------------- | -------------------------------------------------------------------------------- | -------- |
-| county                     | Name of county for pulling data. Ex: *Travis* | String   |
+Gets a timeline of the newly confirmed cases for a given county
 
 __Sample response__
 ```json
   {
-    "count": "27", 
-    "name": "Angelina", 
-    "population": "94,245", 
+    "count": "4977", 
+    "name": "Harris", 
+    "population": "4,885,616", 
     "timeline": {
       "03-04-2020": 0, 
       "03-05-2020": 0, 
-      "03-06-2020": 0, 
-      "03-09-2020": 0
-      }
+      "03-06-2020": 4, 
+      "03-09-2020": 1, 
+      "03-10-2020": 0, 
+      "03-11-2020": 0, 
+      "03-12-2020": 2
+    }
   }
 ```
+### Query Parameters
+
+All endpoints have an optional parameter for county name. If no county is provided, it will provide information for all counties.
+
+| __Query string parameter__ | __Description__                                                                  | __Type__ |
+| -------------------------- | -------------------------------------------------------------------------------- | -------- |
+| county                     | Name of county for pulling data. Ex: *Travis* | String   |
+
+
+
+
+
+
