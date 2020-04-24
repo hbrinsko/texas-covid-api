@@ -7,10 +7,15 @@ Provides up-to-date data about Coronavirus outbreak in Texas.
 
 Assuming that before you begin, you will have [Python](http://www.python.org/) and [pip](http://www.pip-installer.org/en/latest/) installed on your system and available at the command line.
 
-Install depenedencies:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
+```
+
+Run app on http://127.0.0.1:5000/:
+```bash
+python3 api.py
 ```
 ## Data Source
 **Texas Department of State Health Services** - https://www.dshs.texas.gov/coronavirus/TexasCOVID19DailyCountyCaseCountData.xlsx - 
@@ -18,9 +23,21 @@ pip install -r requirements.txt
 * County-level case counts were not available on March 7, March 8, and March 14.
 * Population data is based on Texas population projections, 2020 (https://www.dshs.texas.gov/chs/popdat/st2020.shtm).
 
-## Endpoint Information
+### Endpoint Information
 
-## Endpoints
+__Query Parameters__
+
+All endpoints have an optional parameter for county name. If no county is provided, it will provide information for all counties.
+
+| __Query string parameter__ | __Description__                                                                  | __Type__ |
+| -------------------------- | -------------------------------------------------------------------------------- | -------- |
+| county                     | Name of county for pulling data. Ex: *Travis* | String   |
+
+
+
+
+
+__Latest__
 
 ```http
 GET /api/v1/latest
@@ -37,6 +54,7 @@ __Sample response__
   }
 ```
 
+__Cases__
 ```http
 GET /api/v1/cases
 ```
@@ -58,6 +76,7 @@ __Sample response__
   }
 ```
 
+__New Cases Daily__
 ```http
 GET /api/v1/dailychange
 ```
@@ -82,14 +101,6 @@ __Sample response__
   }
 ```
 ### Query Parameters
-
-All endpoints have an optional parameter for county name. If no county is provided, it will provide information for all counties.
-
-| __Query string parameter__ | __Description__                                                                  | __Type__ |
-| -------------------------- | -------------------------------------------------------------------------------- | -------- |
-| county                     | Name of county for pulling data. Ex: *Travis* | String   |
-
-
 
 
 
