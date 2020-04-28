@@ -1,9 +1,10 @@
 import flask
 from flask import request, jsonify
 import csv
+from flask_cors import CORS
 
 app = flask.Flask(__name__)
-
+CORS(app)
 
 def build_daily_change_timeline(headers, row):
     col = 2
