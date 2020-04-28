@@ -28,7 +28,7 @@ python3 api.py
 
 __Query Parameters__
 
-All endpoints have an optional parameter for county name. If no county is provided, it will provide information for all counties.
+All endpoints have an optional parameter for county name. If no county is provided, it will provide information for all counties. To pull cumulative state totals, use *Total* for the county.
 
 | __Query string parameter__ | __Description__                                                                  | __Type__ |
 | -------------------------- | -------------------------------------------------------------------------------- | -------- |
@@ -39,7 +39,7 @@ All endpoints have an optional parameter for county name. If no county is provid
 __Latest__
 
 ```http
-GET /api/v1/latest
+GET /api/latest
 ```
 
 Gets latest amount of total confirmed cases
@@ -47,57 +47,77 @@ Gets latest amount of total confirmed cases
 Sample Response:
 ```json
   {
-    "cases": "10", 
+    "cases": 10, 
     "county": "Anderson", 
-    "population": "62,245"
+    "population": 62245
   }
 ```
 
 __Cases__
 ```http
-GET /api/v1/cases
+GET /api/cases
 ```
 Gets timeline of case count
 
 Sample Response:
 ```json
-  {
-    "cases": "4977", 
-    "county": "Harris", 
-    "population": "4,885,616", 
-    "timeline": {
-      "03-04-2020": "0", 
-      "03-05-2020": "0", 
-      "03-06-2020": "4", 
-      "03-09-2020": "5", 
-      "03-10-2020": "5"
+{
+    "count": 541,
+    "county": "Galveston",
+    "population": 335006,
+    "timeline": [
+      {
+        "cases": 0,
+        "date": "03-04-2020"
+      },
+      {
+        "cases": 0,
+        "date": "03-05-2020"
+      },
+      {
+        "cases": 0,
+        "date": "03-06-2020"
+      },
+      {
+        "cases": 0,
+        "date": "03-09-2020"
       }
-  }
+    ]
+}
 ```
 
 __New Cases Daily__
 ```http
-GET /api/v1/dailychange
+GET /api/dailychange
 ```
 
 Gets a timeline of the newly confirmed cases for a given county
 
 Sample Response:
 ```json
-  {
-    "count": "4977", 
-    "name": "Harris", 
-    "population": "4,885,616", 
-    "timeline": {
-      "03-04-2020": 0, 
-      "03-05-2020": 0, 
-      "03-06-2020": 4, 
-      "03-09-2020": 1, 
-      "03-10-2020": 0, 
-      "03-11-2020": 0, 
-      "03-12-2020": 2
-    }
-  }
+{
+    "count": 541,
+    "county": "Galveston",
+    "population": 335006,
+    "timeline": [
+      {
+        "cases": 0,
+        "date": "03-04-2020"
+      },
+      {
+        "cases": 0,
+        "date": "03-05-2020"
+      },
+      {
+        "cases": 0,
+        "date": "03-06-2020"
+      },
+      {
+        "cases": 0,
+        "date": "03-09-2020"
+      }
+    ]
+}
 ```
 
 
