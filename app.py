@@ -1,14 +1,17 @@
 import flask
 from flask import request, jsonify
 import csv
-from flask_cors import CORS
+# from flask_cors import CORS
 
 app = flask.Flask(__name__)
-CORS(app)
+# CORS(app)
 
-def build_daily_change_timeline(headers, row):
+def build_daily_change_timeline(headers, row, time_range):
     col = 2
     prev = 0
+    time_range = time_range
+    if time_range != 0:
+        col = len(row) - time_range
     timeline = []
     while col < len(row):
         new = int(row[col])
@@ -22,8 +25,11 @@ def build_daily_change_timeline(headers, row):
     return timeline
 
 
-def build_case_count_timeline(headers, row):
+def build_case_count_timeline(headers, row, time_range):
     col = 2
+    time_range = time_range
+    if time_range != 0:
+        col = len(row) - time_range
     timeline = []
     while col < len(row):
         date = {
@@ -31,7 +37,6 @@ def build_case_count_timeline(headers, row):
             'cases': int(row[col])
         }
         timeline.append(date)
-        #timeline[headers[col]] = row[col]
         col += 1
     return timeline
 
@@ -91,12 +96,15 @@ def latest_county():
 @app.route('/api/cases', methods=['GET'])
 def timeline_county():
     get_all = False
+    time_range = 0
     if 'county' in request.args:
         names = request.args['county']
         names = names.lower().split(',')
     else:
         get_all = True
-        # return "Error: No county provided. Please specify a county, ex: Travis."
+
+    if 'range' in request.args:
+        time_range = int(request.args['range'])
 
     with open('counties.csv', 'r') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
@@ -108,7 +116,7 @@ def timeline_county():
                     'county': row[0],
                     'population': int(row[1].replace(',','')),
                     'cases': int(row[-1]),
-                    'timeline': build_case_count_timeline(headers, row)
+                    'timeline': build_case_count_timeline(headers, row, time_range)
                 }
                 counties.append(county)
                 continue
@@ -117,7 +125,7 @@ def timeline_county():
                     'county': row[0],
                     'population': int(row[1].replace(',','')),
                     'cases': int(row[-1]),
-                    'timeline': build_case_count_timeline(headers, row)
+                    'timeline': build_case_count_timeline(headers, row, time_range)
                 }
                 counties.append(county)
     if len(counties) > 0:
@@ -129,11 +137,15 @@ def timeline_county():
 @app.route('/api/dailychange', methods=['GET'])
 def daily_change_county():
     get_all = False
+    time_range = 0
     if 'county' in request.args:
         names = request.args['county']
         names = names.lower().split(',')
     else:
         get_all = True
+
+    if 'range' in request.args:
+        time_range = int(request.args['range'])    
 
     with open('counties.csv', 'r') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
@@ -145,7 +157,7 @@ def daily_change_county():
                     'county': row[0],
                     'population': int(row[1].replace(',','')),
                     'count': int(row[-1]),
-                    'timeline': build_daily_change_timeline(headers, row)
+                    'timeline': build_daily_change_timeline(headers, row, time_range)
                 }
                 counties.append(county)   
                 continue             
@@ -154,7 +166,7 @@ def daily_change_county():
                     'county': row[0],
                     'population': int(row[1].replace(',','')),
                     'count': int(row[-1]),
-                    'timeline': build_daily_change_timeline(headers, row)
+                    'timeline': build_daily_change_timeline(headers, row, time_range)
                 }
                 counties.append(county)
     if len(counties) > 0:
