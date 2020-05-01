@@ -12,6 +12,7 @@ def build_daily_change_timeline(headers, row, time_range):
     time_range = time_range
     if time_range != 0:
         col = len(row) - time_range
+        prev = int(row[col-1])
     timeline = []
     while col < len(row):
         new = int(row[col])
