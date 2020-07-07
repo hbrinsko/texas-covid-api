@@ -29,7 +29,14 @@ python3 api.py
 * Population data is based on Texas population projections, 2020 (https://www.dshs.texas.gov/chs/popdat/st2020.shtm).
 
 
+https://www.dshs.texas.gov/coronavirus/TexasCOVID-19CumulativeTestsOverTimebyCounty.xlsx
 
+
+*  Cumulative test totals include tests performed by public labs (Laboratory Response Network) AND non-public labs (commercial labs, hospitals, physician offices, and drive-thru sites) reported electronically and non-electronically. 								
+* Test totals do not correlate with county counts of COVID-19 cases reported elsewhere on this DSHS website.								
+* Ordering provider county is used when resident county is unavailable.								
+* Note: No daily report for tests through 5/5 was produced due to delay in electronic lab reporting (ELR) system								
+								
 ## Endpoint Information
 
 __Query Parameters__
